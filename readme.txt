@@ -10,6 +10,8 @@ Released under MIT/X11 license.
 
 Note that Touch Mouse SDK is available under a non-commercial license, so that Touch Mouse Mate as a derived product cannot be used for commercial purposes.
 
+This project is based on J5's amazing work here, http://www.blogtecnologico.it/2011/12/how-to-enable-middle-click-on-microsoft-touch-mouse/
+
 *Hints on the code base*
 
 To compile the code, make sure that Windows 7 x64 is used.
