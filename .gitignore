@@ -23,3 +23,7 @@ logs
 *.generated.cs
 T4MVC.cs
 /lib/Microsoft.Research.TouchMouseSensor.dll
+/setup/x64/Microsoft.Research.TouchMouseSensor.dll
+/setup/x64/TouchMouseSensor.dll
+/setup/x86/Microsoft.Research.TouchMouseSensor.dll
+/setup/x86/TouchMouseSensor.dll
