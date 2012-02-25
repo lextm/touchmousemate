@@ -56,10 +56,11 @@ Source: "Microsoft.Research.TouchMouseSensor.dll"; DestDir: "{app}"; Components:
 Source: "mouse.ico"; DestDir: "{app}"; Components: TMM
 
 [Icons]
-Name: {group}\{cm:UninstallProgram,{#MyAppName}}; Filename: {uninstallexe}; Components: TMM
-Name: {group}\Author's Blog; Filename: http://lextm.com; Components: TMM
-Name: {group}\Report A Bug; Filename: http://touchmousemate.codeplex.com/workitem/list/basic; Components: TMM
-Name: {group}\Homepage; Filename: http://touchmousemate.codeplex.com; Components: TMM
+Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"; Components: TMM
+Name: "{group}\Author's Blog"; Filename: "http://lextm.com"; Components: TMM
+Name: "{group}\Report A Bug"; Filename: "http://touchmousemate.codeplex.com/workitem/list/basic"; Components: TMM
+Name: "{group}\Homepage"; Filename: "http://touchmousemate.codeplex.com"; Components: TMM
+Name: "{group}\Touch Mouse Mate"; Filename: "{app}\TouchMouseMate.exe"; WorkingDir: "{app}"; IconFilename: "{app}\mouse.ico"
 
 [Run]
 Filename: {win}\Microsoft.NET\Framework\v4.0.30319\ngen.exe; Parameters: "install ""{app}\TouchMouseMate.exe"""; WorkingDir: {app}; StatusMsg: Optimising Performance; Flags: runhidden skipifdoesntexist
@@ -68,7 +69,7 @@ Filename: {win}\Microsoft.NET\Framework\v4.0.30319\ngen.exe; Parameters: "instal
 Filename: {win}\Microsoft.NET\Framework\v4.0.30319\ngen.exe; Parameters: "uninstall ""{app}\TouchMouseMate.exe"""; WorkingDir: {app}; StatusMsg: Optimising Performance; Flags: runhidden skipifdoesntexist
 
 [Registry]
-Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Touch Mouse Mate"; ValueData: ""{app}\TouchMouseMate.exe""; Flags: uninsdeletevalue
+Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Touch Mouse Mate"; ValueData: "{app}\TouchMouseMate.exe"; Flags: uninsdeletevalue
 
 [Code]
 // function IsModuleLoaded to call at install time
