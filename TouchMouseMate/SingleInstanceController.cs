@@ -85,7 +85,6 @@ namespace Lextm.TouchMouseMate
                             ContextMenuStrip = strip,
                             Visible = true
                         };
-            _icon.MouseClick += (sender, args) => _icon.ShowBalloonTip(5000, "Info", "Right click for context menu", ToolTipIcon.Info);
             _icon.ShowBalloonTip(5000, "Info", "Touch Mouse Mate has started", ToolTipIcon.Info);
             _icon.Text = string.Format("Touch Mouse Mate {0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
             Application.Run();

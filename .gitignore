@@ -29,3 +29,4 @@ T4MVC.cs
 /setup/x86/TouchMouseSensor.dll
 /setup/x86/setup.exe
 /setup/x64/setup.exe
+*.exe
