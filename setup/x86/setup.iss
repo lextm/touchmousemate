@@ -66,6 +66,9 @@ Filename: {win}\Microsoft.NET\Framework\v4.0.30319\ngen.exe; Parameters: "instal
 [UninstallRun]
 Filename: {win}\Microsoft.NET\Framework\v4.0.30319\ngen.exe; Parameters: "uninstall ""{app}\TouchMouseMate.exe"""; WorkingDir: {app}; StatusMsg: Optimising Performance; Flags: runhidden skipifdoesntexist
 
+[Registry]
+Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "TouchMouseMate"; ValueData: ""{app}\TouchMouseMate.exe""; Flags: uninsdeletevalue
+
 [Code]
 // function IsModuleLoaded to call at install time
 // added also setuponly flag
