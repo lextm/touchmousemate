@@ -65,6 +65,9 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\mouse.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Research.TouchMouseSensor">
       <HintPath>..\lib\Microsoft.Research.TouchMouseSensor.dll</HintPath>
@@ -101,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="app.manifest" />
     <None Include="Microsoft.VersionNumber.targets" />
     <None Include="Resources\mouse.ico" />
   </ItemGroup>
