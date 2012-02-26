@@ -73,6 +73,7 @@ namespace Lextm.TouchMouseMate
         internal static int OpMode = 2; // old middle click detection approach and new approach switch.
         public static bool TouchOverClick = true;
         public static bool MiddleClick = true;
+        public static bool LeftHandMode;
 
         public static void SetCursorPosition(int x, int y)
         {
@@ -310,8 +311,8 @@ namespace Lextm.TouchMouseMate
                 Console.ResetColor();
                 if (TouchOverClick)
                 {
-                    MouseEvent(MouseEventFlags.LeftDown);
-                    MouseEvent(MouseEventFlags.LeftUp);
+                    MouseEvent(LeftHandMode ? MouseEventFlags.RightDown : MouseEventFlags.LeftDown);
+                    MouseEvent(LeftHandMode ? MouseEventFlags.RightUp : MouseEventFlags.LeftUp);
                 }
 
                 TouchPoints[0].ResetAll();
@@ -324,8 +325,8 @@ namespace Lextm.TouchMouseMate
                 Console.ResetColor();
                 if (TouchOverClick)
                 {
-                    MouseEvent(MouseEventFlags.RightDown);
-                    MouseEvent(MouseEventFlags.RightUp);
+                    MouseEvent(LeftHandMode ? MouseEventFlags.LeftDown : MouseEventFlags.RightDown);
+                    MouseEvent(LeftHandMode ? MouseEventFlags.LeftUp : MouseEventFlags.RightUp);
                 }
 
                 TouchPoints[2].ResetAll();
@@ -358,8 +359,8 @@ namespace Lextm.TouchMouseMate
                             Console.ResetColor();
                             if (TouchOverClick)
                             {
-                                MouseEvent(MouseEventFlags.LeftDown);
-                                MouseEvent(MouseEventFlags.LeftUp);
+                                MouseEvent(LeftHandMode ? MouseEventFlags.RightDown : MouseEventFlags.LeftDown);
+                                MouseEvent(LeftHandMode ? MouseEventFlags.RightUp : MouseEventFlags.LeftUp);
                             }
 
                             ClickDetected = true;
@@ -384,8 +385,8 @@ namespace Lextm.TouchMouseMate
                             Console.ResetColor();
                             if (TouchOverClick)
                             {
-                                MouseEvent(MouseEventFlags.RightDown);
-                                MouseEvent(MouseEventFlags.RightUp);
+                                MouseEvent(LeftHandMode ? MouseEventFlags.LeftDown : MouseEventFlags.RightDown);
+                                MouseEvent(LeftHandMode ? MouseEventFlags.LeftUp : MouseEventFlags.RightUp);
                             }
 
                             ClickDetected = true;

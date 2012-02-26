@@ -67,6 +67,13 @@ namespace Lextm.TouchMouseMate.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap input_mouse {
+            get {
+                object obj = ResourceManager.GetObject("input_mouse", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Icon mouse {
             get {
                 object obj = ResourceManager.GetObject("mouse", resourceCulture);

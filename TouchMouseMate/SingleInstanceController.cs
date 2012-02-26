@@ -33,6 +33,7 @@ namespace Lextm.TouchMouseMate
             NativeMethods.MaxClickTimeout = _section.MaxClickTimeout;
             NativeMethods.MiddleClick = _section.MiddleClick;
             NativeMethods.TouchOverClick = _section.TouchOverClick;
+            NativeMethods.LeftHandMode = _section.LeftHandMode;
 
             _callback = NativeMethods.TouchMouseCallbackFunction;
             // Set up callback with TouchMouseSensor DLL.
@@ -61,6 +62,15 @@ namespace Lextm.TouchMouseMate
                                                                   _section.MiddleClick = NativeMethods.MiddleClick;
                                                                   _config.Save();
                                                               }) {Checked = NativeMethods.MiddleClick, CheckOnClick = true};
+            var leftHand = new ToolStripMenuItem("Left-hand",
+                                                 Properties.Resources.input_mouse,
+                                                 (sender, args) =>
+                                                     {
+                                                         var menu = (ToolStripMenuItem)sender;
+                                                         NativeMethods.LeftHandMode = menu.Checked;
+                                                         _section.LeftHandMode = NativeMethods.LeftHandMode;
+                                                         _config.Save();
+                                                     }) {Checked = NativeMethods.LeftHandMode, CheckOnClick = true};
             var exit = new ToolStripMenuItem("Exit",
                                              Properties.Resources.system_log_out,
                                              (sender, args) =>
@@ -73,8 +83,9 @@ namespace Lextm.TouchMouseMate
                                                  });
             strip.Items.Add(middleClick);
             strip.Items.Add(touchOverClick);
+            strip.Items.Add(leftHand);
             strip.Items.Add(help);
-            strip.Items.Add("-");
+            strip.Items.Add(new ToolStripMenuItem("-"));
             strip.Items.Add(exit);
             //Published on November 23rd 2008 by Aston.
             //Released under the Free Art (copyleft) license.

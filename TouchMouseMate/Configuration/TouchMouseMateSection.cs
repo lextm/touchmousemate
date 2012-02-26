@@ -38,5 +38,12 @@ namespace Lextm.TouchMouseMate.Configuration
             get { return (bool)base["touchOverClick"]; }
             set { base["touchOverClick"] = value; }
         }
+
+        [ConfigurationProperty("leftHandMode", IsRequired = true)]
+        public bool LeftHandMode
+        {
+            get { return (bool)base["leftHandMode"]; }
+            set { base["leftHandMode"] = value; }
+        }
     }
 }
