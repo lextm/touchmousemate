@@ -210,13 +210,15 @@ begin
     Exit;
   end;
 
-  if ProductRunning then
-  begin
-    MsgBox( '{#MyAppName} is running, please close it and run setup again.',
-             mbError, MB_OK );
-    Result := False;
-    Exit;
-  end;
+//  if ProductRunning then
+//  begin
+//    MsgBox( '{#MyAppName} is running, please close it and run setup again.',
+//             mbError, MB_OK );
+//    Result := False;
+//    Exit;
+//  end;
+
+  MsgBox( 'If {#MyAppName} is running, please close it now.', mbInformation, MB_OK );
 
   if not ProductInstalled then
   begin
