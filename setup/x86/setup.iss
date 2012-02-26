@@ -73,12 +73,12 @@ Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType
 [Code]
 // function IsModuleLoaded to call at install time
 // added also setuponly flag
-function IsModuleLoaded(modulename: String ):  Boolean;
+function IsModuleLoaded(modulename: AnsiString ):  Boolean;
 external 'IsModuleLoaded@files:psvince.dll stdcall setuponly';
 
 // function IsModuleLoadedU to call at uninstall time
 // added also uninstallonly flag
-function IsModuleLoadedU(modulename: String ):  Boolean;
+function IsModuleLoadedU(modulename: AnsiString ):  Boolean;
 external 'IsModuleLoaded@{app}\psvince.dll stdcall uninstallonly' ;
 
 // =======================================
@@ -158,13 +158,27 @@ end;
 
 function ProductRunning(): Boolean;
 begin
-  Result := IsModuleLoaded( 'touchmousemate.exe' );
+  Result := IsModuleLoaded( 'TouchMouseMate.exe' );
 end;
 
 function ProductInstalled(): Boolean;
 begin
   Result := RegKeyExists(HKEY_LOCAL_MACHINE,
   'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#MyAppID}_is1');
+end;
+
+function VCRuntimeInstalled(): Boolean;
+var 
+  installed: Cardinal;
+begin
+  if not (RegQueryDWordValue(HKEY_LOCAL_MACHINE,
+  'SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x86', 'Installed', installed)) then
+  begin
+    Result := False;
+    Exit;
+  end;
+
+  Result := installed = 1;
 end;
 
 function InitializeSetup(): Boolean;
@@ -184,6 +198,13 @@ begin
   if IsSafeModeBoot then
   begin
     MsgBox('Cannot install under Windows Safe Mode.', mbError, MB_OK);
+    Result := False;
+    Exit;
+  end;
+  
+  if not VCRuntimeInstalled then
+  begin
+    MsgBox('{#MyAppName} needs Microsoft Visual C++ 2010 runtime to be installed (x86)', mbInformation, MB_OK);
     Result := False;
     Exit;
   end;
