@@ -28,6 +28,17 @@ namespace Lextm.TouchMouseMate
 
                 machine.Timer.Enabled = false;
             }
+            else if (flag == MouseEventFlags.LeftUp)
+            {
+                Console.WriteLine("left down p->idle");
+                machine.Current = Idle.Instance;
+                machine.Timer.Enabled = false;
+                if (NativeMethods.Section.TouchOverClick)
+                {
+                    NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.RightDown : MouseEventFlags.LeftDown);
+                    NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.RightUp : MouseEventFlags.LeftUp);
+                }
+            }
         }
 
         public static LeftDownPending Instance = new LeftDownPending();
