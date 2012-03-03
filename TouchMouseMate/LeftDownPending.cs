@@ -33,11 +33,6 @@ namespace Lextm.TouchMouseMate
                 Console.WriteLine("left down p->idle");
                 machine.Current = Idle.Instance;
                 machine.Timer.Enabled = false;
-                if (NativeMethods.Section.TouchOverClick)
-                {
-                    NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.RightDown : MouseEventFlags.LeftDown);
-                    NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.RightUp : MouseEventFlags.LeftUp);
-                }
             }
         }
 

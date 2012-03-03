@@ -8,7 +8,7 @@ namespace Lextm.TouchMouseMate
         public StateMachine()
         {
             Current = Idle.Instance;
-            Timer = new Timer {Interval = 50, Enabled = false, AutoReset = false};
+            Timer = new Timer {Interval = NativeMethods.Section.MinClickTimeout, Enabled = false, AutoReset = false};
             Timer.Elapsed += (sender, args) => Process(MouseEventFlags.Absolute);
         }
 
