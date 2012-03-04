@@ -8,7 +8,7 @@ namespace Lextm.TouchMouseMate
         private TouchPoint _previous;
         private TouchPoint _previousPrevious;
         private int _time;
-        internal double _movement;
+        internal double Movement;
 
         public void Consume(int x, int y, int pixel)
         {
@@ -27,7 +27,7 @@ namespace Lextm.TouchMouseMate
                 _current.ComputeCenter();
                 if (_previous.Pixel > 0)
                 {
-                    _movement += (_current.CenterX - _previous.CenterX)*(_current.CenterX - _previous.CenterX)
+                    Movement += (_current.CenterX - _previous.CenterX)*(_current.CenterX - _previous.CenterX)
                                  + (_current.CenterY - _previous.CenterY)*(_current.CenterY - _previous.CenterY);
                 }
             }
@@ -45,13 +45,11 @@ namespace Lextm.TouchMouseMate
 
         public bool MoveDetected
         {
-            get { return _movement > 0.04; }
+            get { return Movement > NativeMethods.Section.MoveThreshold; }
         }
 
         public void Prepare()
         {
-           // Console.WriteLine("Move: {0}", _movement);
-
             _previousPrevious = _previous;
             _previous = _current;
             _current.Reset();
@@ -60,7 +58,7 @@ namespace Lextm.TouchMouseMate
         public void Reset()
         {
             _time = 0;
-            _movement = 0F;
+            Movement = 0F;
         }
     }
 }

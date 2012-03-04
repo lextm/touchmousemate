@@ -1,5 +1,4 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Runtime.InteropServices;
 using Lextm.TouchMouseMate.Configuration;
 using Microsoft.Research.TouchMouseSensor;
@@ -92,10 +91,10 @@ namespace Lextm.TouchMouseMate
             PixelFound[1] = 0;
 
             // Iterate over rows.
-            for (Int32 y = 0; y < pTouchMouseStatus.m_dwImageHeight; y++)
+            for (int y = 0; y < pTouchMouseStatus.m_dwImageHeight; y++)
             {
                 // Iterate over columns.
-                for (Int32 x = 0; x < pTouchMouseStatus.m_dwImageWidth; x++)
+                for (int x = 0; x < pTouchMouseStatus.m_dwImageWidth; x++)
                 {
                     if (pabImage[pTouchMouseStatus.m_dwImageWidth*y + x] != 0)
                         // analyze captured image for touch gesture.
@@ -133,8 +132,7 @@ namespace Lextm.TouchMouseMate
                     }
                 }
             }
-
-            //Console.WriteLine("TouchPoint#{0}: Strength: {1}, Time: {2}", 0, LeftTouchPoint.Pixel, pTouchMouseStatus.m_dwTimeDelta);
+            
             // Calculate and display the center of mass for the touches present.
             _leftZone.AppendTime(pTouchMouseStatus.m_dwTimeDelta);
             _rightZone.AppendTime(pTouchMouseStatus.m_dwTimeDelta);
@@ -145,7 +143,7 @@ namespace Lextm.TouchMouseMate
             {
                 // If the time delta is zero then there has been an 
                 // undetermined delta since the last report.
-                Console.WriteLine("New touch detected");
+                Log.Info("New touch detected");
                 Machine.Idle();
                 _leftZone.Reset();
                 _rightZone.Reset();
@@ -157,7 +155,7 @@ namespace Lextm.TouchMouseMate
             {
                 // The mouse is now disconnected, if we had created objects to track 
                 // the mouse they would be destroyed here.
-                Console.WriteLine("\nMouse #{0:X4}: Disconnected\n",
+                Log.InfoFormat("\nMouse #{0:X4}: Disconnected\n",
                                   (pTouchMouseStatus.m_dwID & 0xFFFF));
             }
         }
@@ -168,14 +166,14 @@ namespace Lextm.TouchMouseMate
             {
                 for (int x = LeftBound[0]; x <= LeftBound[1]; x++)
                 {
-                    if (TouchMap[x, y] == true) PixelFound[0]++;
+                    if (TouchMap[x, y]) PixelFound[0]++;
                 }
             }
             for (int y = RightBound[2]; y <= RightBound[3]; y++)
             {
                 for (int x = RightBound[0]; x <= RightBound[1]; x++)
                 {
-                    if (TouchMap[x, y] == true) PixelFound[1]++;
+                    if (TouchMap[x, y]) PixelFound[1]++;
                 }
             }
 
@@ -201,12 +199,24 @@ namespace Lextm.TouchMouseMate
 
             if (_leftZone.MoveDetected)
             {
-                Machine.Process(MouseEventFlags.Move);
+                Log.DebugFormat("left move {0}", _leftZone.Movement);
+                if (Section.MoveDetect)
+                {
+                    Machine.Process(MouseEventFlags.Move);
+                }
+
+                _leftZone.Movement = 0F;
             }
 
             if (_rightZone.MoveDetected)
             {
-                Machine.Process(MouseEventFlags.Move);
+                Log.DebugFormat("right move {0}", _rightZone.Movement);
+                if (Section.MoveDetect)
+                {
+                    Machine.Process(MouseEventFlags.Move);
+                }
+
+                _rightZone.Movement = 0F;
             }
 
             _leftZone.Prepare();

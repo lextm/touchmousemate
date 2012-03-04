@@ -4,6 +4,7 @@ namespace Lextm.TouchMouseMate
 {
     public class StateMachine
     {
+        private readonly object _locker = new object();
         private IMouseState _current;
         private readonly Timer _timer;
         private readonly IMouseState _idle = new Idle();
@@ -23,12 +24,36 @@ namespace Lextm.TouchMouseMate
 
         public void Process(MouseEventFlags flag)
         {
-            _current.Process(flag, this);
+            lock (_locker)
+            {
+                _current.Process(flag, this);
+            }
         }
 
         public void Idle()
         {
             _timer.Enabled = false;
+            if (_current == _leftDown)
+            {
+                if (NativeMethods.Section.TouchOverClick)
+                {
+                    NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.RightUp : MouseEventFlags.LeftUp);
+                }
+            }
+            else if (_current == _rightDown)
+            {
+                if (NativeMethods.Section.TouchOverClick)
+                {
+                    NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.LeftUp : MouseEventFlags.RightUp);
+                }
+            }
+            else if (_current == _middleDown)
+            {
+                if (NativeMethods.Section.MiddleClick)
+                {
+                    NativeMethods.MouseEvent(MouseEventFlags.MiddleUp);
+                }
+            }
             _current = _idle;
         }
 
@@ -36,18 +61,30 @@ namespace Lextm.TouchMouseMate
         {
             _timer.Enabled = false;
             _current = _leftDown;
+            if (NativeMethods.Section.TouchOverClick)
+            {
+                NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.RightDown : MouseEventFlags.LeftDown);
+            }
         }
 
         public void RightDown()
         {
             _timer.Enabled = false; 
             _current = _rightDown;
+            if (NativeMethods.Section.TouchOverClick)
+            {
+                NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.LeftDown : MouseEventFlags.RightDown);
+            }
         }
 
         public void MiddleDown()
         {
             _timer.Enabled = false;
             _current = _middleDown;
+            if (NativeMethods.Section.MiddleClick)
+            {
+                NativeMethods.MouseEvent(MouseEventFlags.MiddleDown);
+            }
         }
 
         public void LeftDownPending()

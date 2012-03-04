@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Microsoft.Research.TouchMouseSensor;
 using Microsoft.VisualBasic.ApplicationServices;
+using log4net.Config;
 
 namespace Lextm.TouchMouseMate
 {
@@ -23,6 +24,7 @@ namespace Lextm.TouchMouseMate
 
         protected override bool OnStartup(StartupEventArgs e)
         {
+            //XmlConfigurator.Configure();
             _callback = NativeMethods.TouchMouseCallbackFunction;
             // Set up callback with TouchMouseSensor DLL.
             TouchMouseSensorInterop.RegisterTouchMouseCallback(_callback);

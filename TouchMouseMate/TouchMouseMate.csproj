@@ -69,6 +69,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Research.TouchMouseSensor">
       <HintPath>..\lib\Microsoft.Research.TouchMouseSensor.dll</HintPath>
     </Reference>
@@ -94,6 +97,7 @@
     <Compile Include="IMouseState.cs" />
     <Compile Include="LeftDown.cs" />
     <Compile Include="LeftDownPending.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -115,7 +119,9 @@
     <Compile Include="TouchZone.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="app.manifest" />
     <None Include="Microsoft.VersionNumber.targets" />
     <None Include="Resources\mouse.ico" />

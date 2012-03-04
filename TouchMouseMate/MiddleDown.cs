@@ -1,5 +1,3 @@
-using System;
-
 namespace Lextm.TouchMouseMate
 {
     public class MiddleDown : IMouseState
@@ -8,12 +6,8 @@ namespace Lextm.TouchMouseMate
         {
             if (flag == MouseEventFlags.LeftUp || flag == MouseEventFlags.RightUp)
             {
-                Console.WriteLine("middle down->idle");
+                Log.Info("middle down->idle");
                 machine.Idle();
-                if (NativeMethods.Section.MiddleClick)
-                {
-                    NativeMethods.MouseEvent(MouseEventFlags.MiddleUp);
-                }
             }
         }
     }

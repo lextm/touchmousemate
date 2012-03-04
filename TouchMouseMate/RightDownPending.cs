@@ -15,10 +15,6 @@ namespace Lextm.TouchMouseMate
             {
                 Console.WriteLine("right down p->right down");
                 machine.RightDown();
-                if (NativeMethods.Section.TouchOverClick)
-                {
-                    NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.LeftDown : MouseEventFlags.RightDown);
-                }
             }
             else if (flag == MouseEventFlags.RightUp)
             {
@@ -28,6 +24,7 @@ namespace Lextm.TouchMouseMate
             else if (flag == MouseEventFlags.Move)
             {
                 Console.WriteLine("right down p-> idle (move)");
+                Log.Debug("right down cancelled");
                 machine.Idle();
             }
         }

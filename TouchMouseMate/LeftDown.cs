@@ -1,5 +1,3 @@
-using System;
-
 namespace Lextm.TouchMouseMate
 {
     public class LeftDown : IMouseState
@@ -8,12 +6,8 @@ namespace Lextm.TouchMouseMate
         {
             if (flag == MouseEventFlags.LeftUp)
             {
-                Console.WriteLine("left down->idle");
+                Log.Info("left down->idle");
                 machine.Idle();
-                if (NativeMethods.Section.TouchOverClick)
-                {
-                    NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.RightUp : MouseEventFlags.LeftUp);
-                }
             }
         }
     }

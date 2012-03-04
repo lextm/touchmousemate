@@ -1,5 +1,3 @@
-using System;
-
 namespace Lextm.TouchMouseMate
 {
     public class Idle : IMouseState
@@ -8,16 +6,14 @@ namespace Lextm.TouchMouseMate
         {
             if (flag == MouseEventFlags.LeftDown)
             {
-                Console.WriteLine("idle -> left down p");
+                Log.Info("idle -> left down p");
                 machine.LeftDownPending();
             }
             else if (flag == MouseEventFlags.RightDown)
             {
-                Console.WriteLine("idle -> right down p");
+                Log.Info("idle -> right down p");
                 machine.RightDownPending();
             }
         }
-
-        public static Idle Instance = new Idle();
     }
 }

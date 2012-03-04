@@ -10,10 +10,6 @@ namespace Lextm.TouchMouseMate
             {
                 Console.WriteLine("right down->idle");
                 machine.Idle();
-                if (NativeMethods.Section.TouchOverClick)
-                {
-                    NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.LeftUp : MouseEventFlags.RightUp);
-                }
             }
         }
     }

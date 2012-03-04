@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using System.Globalization;
 
 namespace Lextm.TouchMouseMate.Configuration
 {
@@ -44,6 +43,20 @@ namespace Lextm.TouchMouseMate.Configuration
         {
             get { return (bool)base["leftHandMode"]; }
             set { base["leftHandMode"] = value; }
+        }
+
+        [ConfigurationProperty("moveDetect", IsRequired = true)]
+        public bool MoveDetect
+        {
+            get { return (bool) base["moveDetect"]; }
+            set { base["moveDetect"] = value; }
+        }
+
+        [ConfigurationProperty("moveThreshold", IsRequired = true)]
+        public double MoveThreshold
+        {
+            get { return (double) base["moveThreshold"]; }
+            set { base["moveThreshold"] = value; }
         }
     }
 }

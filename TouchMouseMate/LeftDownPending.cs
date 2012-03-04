@@ -1,5 +1,3 @@
-using System;
-
 namespace Lextm.TouchMouseMate
 {
     public class LeftDownPending : IMouseState
@@ -8,26 +6,23 @@ namespace Lextm.TouchMouseMate
         {
             if (flag == MouseEventFlags.RightDown)
             {
-                Console.WriteLine("left down p->middle down p");
+                Log.Info("left down p->middle down p");
                 machine.MiddleDownPending();
             }
             else if (flag == MouseEventFlags.Absolute)
             {
-                Console.WriteLine("left down p-> left down");
+                Log.Info("left down p-> left down");
                 machine.LeftDown();
-                if (NativeMethods.Section.TouchOverClick)
-                {
-                    NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.RightDown : MouseEventFlags.LeftDown);
-                }
             }
             else if (flag == MouseEventFlags.LeftUp)
             {
-                Console.WriteLine("left down p->idle");
+                Log.Info("left down p->idle");
                 machine.Idle();
             }
             else if (flag == MouseEventFlags.Move)
             {
-                Console.WriteLine("left down p-> idle (move)");
+                Log.Info("left down p-> idle (move)");
+                Log.Debug("left down cancelled");
                 machine.Idle();
             }
         }

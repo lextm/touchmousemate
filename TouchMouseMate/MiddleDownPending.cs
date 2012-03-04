@@ -1,5 +1,3 @@
-using System;
-
 namespace Lextm.TouchMouseMate
 {
     public class MiddleDownPending : IMouseState
@@ -8,16 +6,13 @@ namespace Lextm.TouchMouseMate
         {
             if (flag == MouseEventFlags.Absolute)
             {
-                Console.WriteLine("middle down p->middle down");
+                Log.Info("middle down p->middle down");
                 machine.MiddleDown();
-                if (NativeMethods.Section.MiddleClick)
-                {
-                    NativeMethods.MouseEvent(MouseEventFlags.MiddleDown);
-                }
             }
             else if (flag == MouseEventFlags.Move)
             {
-                Console.WriteLine("middle down p-> idle (move)");
+                Log.Info("middle down p-> idle (move)");
+                Log.Debug("middle down cancelled");
                 machine.Idle();
             }
         }
