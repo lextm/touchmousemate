@@ -12,6 +12,7 @@ namespace Lextm.TouchMouseMate
         {
             Config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
             Section = (TouchMouseMateSection)Config.GetSection("touchMouseMate");
+            Machine = new StateMachine();
         }
 
         public static TouchMouseMateSection Section { get; private set; }
@@ -29,8 +30,8 @@ namespace Lextm.TouchMouseMate
         [DllImport("user32.dll")]
         private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
 
-        private static TouchPoint _leftTouchPoint;
-        private static TouchPoint _rightTouchPoint;
+        private static TouchZone _leftZone;
+        private static TouchZone _rightZone;
 
         internal static bool[,] TouchMap = new bool[16,14];
         internal static int[] LeftBound = {3, 7, 2, 12};
@@ -74,7 +75,7 @@ namespace Lextm.TouchMouseMate
             }
         }
 
-        private static readonly StateMachine Machine = new StateMachine();
+        private static readonly StateMachine Machine;
 
         /// <summary>
         /// Function receiving callback from mouse.
@@ -108,7 +109,7 @@ namespace Lextm.TouchMouseMate
                             // Increment values.
                             if (pixel != 0)
                             {
-                                _leftTouchPoint.Consume(x, y, pixel);
+                                _leftZone.Consume(x, y, pixel);
                             }
                         }
                         else if (x >= MiddleBound[0] && x <= MiddleBound[1] &&
@@ -126,7 +127,7 @@ namespace Lextm.TouchMouseMate
                             // Increment values.
                             if (pixel != 0)
                             {
-                                _rightTouchPoint.Consume(x, y, pixel);
+                                _rightZone.Consume(x, y, pixel);
                             }
                         }
                     }
@@ -135,17 +136,19 @@ namespace Lextm.TouchMouseMate
 
             //Console.WriteLine("TouchPoint#{0}: Strength: {1}, Time: {2}", 0, LeftTouchPoint.Pixel, pTouchMouseStatus.m_dwTimeDelta);
             // Calculate and display the center of mass for the touches present.
-            _leftTouchPoint.Time += pTouchMouseStatus.m_dwTimeDelta;
-            _rightTouchPoint.Time += pTouchMouseStatus.m_dwTimeDelta;
-            _leftTouchPoint.ComputeCenter();
-            _rightTouchPoint.ComputeCenter();
+            _leftZone.AppendTime(pTouchMouseStatus.m_dwTimeDelta);
+            _rightZone.AppendTime(pTouchMouseStatus.m_dwTimeDelta);
+            _leftZone.ComputeCenter();
+            _rightZone.ComputeCenter();
 
             if (pTouchMouseStatus.m_dwTimeDelta == 0)
             {
                 // If the time delta is zero then there has been an 
                 // undetermined delta since the last report.
                 Console.WriteLine("New touch detected");
-                Machine.Reset();
+                Machine.Idle();
+                _leftZone.Reset();
+                _rightZone.Reset();
             }
 
             ApproachThree();
@@ -176,28 +179,38 @@ namespace Lextm.TouchMouseMate
                 }
             }
 
-            if (_leftTouchPoint.KeyUpDetected)
+            if (_leftZone.KeyUpDetected)
             {
                 Machine.Process(MouseEventFlags.LeftUp);
             }
 
-            if (_rightTouchPoint.KeyUpDetected)
+            if (_rightZone.KeyUpDetected)
             {
                 Machine.Process(MouseEventFlags.RightUp);
             }
 
-            if (_leftTouchPoint.KeyDownDetected)
+            if (_leftZone.KeyDownDetected)
             {
                 Machine.Process(MouseEventFlags.LeftDown);
             }
 
-            if (_rightTouchPoint.KeyDownDetected)
+            if (_rightZone.KeyDownDetected)
             {
                 Machine.Process(MouseEventFlags.RightDown);
             }
 
-            _leftTouchPoint.Prepare();
-            _rightTouchPoint.Prepare();
+            if (_leftZone.MoveDetected)
+            {
+                Machine.Process(MouseEventFlags.Move);
+            }
+
+            if (_rightZone.MoveDetected)
+            {
+                Machine.Process(MouseEventFlags.Move);
+            }
+
+            _leftZone.Prepare();
+            _rightZone.Prepare();
         }
     }
 }

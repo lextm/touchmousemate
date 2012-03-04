@@ -8,34 +8,28 @@ namespace Lextm.TouchMouseMate
         {
             if (flag == MouseEventFlags.RightDown)
             {
-                Console.WriteLine("left down p->middle down");
-                machine.Current = MiddleDown.Instance;
-                if (NativeMethods.Section.MiddleClick)
-                {
-                    NativeMethods.MouseEvent(MouseEventFlags.MiddleDown);
-                }
-
-                machine.Timer.Enabled = false;
+                Console.WriteLine("left down p->middle down p");
+                machine.MiddleDownPending();
             }
             else if (flag == MouseEventFlags.Absolute)
             {
                 Console.WriteLine("left down p-> left down");
-                machine.Current = LeftDown.Instance;
+                machine.LeftDown();
                 if (NativeMethods.Section.TouchOverClick)
                 {
                     NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.RightDown : MouseEventFlags.LeftDown);
                 }
-
-                machine.Timer.Enabled = false;
             }
             else if (flag == MouseEventFlags.LeftUp)
             {
                 Console.WriteLine("left down p->idle");
-                machine.Current = Idle.Instance;
-                machine.Timer.Enabled = false;
+                machine.Idle();
+            }
+            else if (flag == MouseEventFlags.Move)
+            {
+                Console.WriteLine("left down p-> idle (move)");
+                machine.Idle();
             }
         }
-
-        public static LeftDownPending Instance = new LeftDownPending();
     }
 }

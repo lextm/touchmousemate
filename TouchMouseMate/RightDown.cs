@@ -9,14 +9,12 @@ namespace Lextm.TouchMouseMate
             if (flag == MouseEventFlags.RightUp)
             {
                 Console.WriteLine("right down->idle");
-                machine.Current = Idle.Instance;
+                machine.Idle();
                 if (NativeMethods.Section.TouchOverClick)
                 {
                     NativeMethods.MouseEvent(NativeMethods.Section.LeftHandMode ? MouseEventFlags.LeftUp : MouseEventFlags.RightUp);
                 }
             }
         }
-
-        public static RightDown Instance = new RightDown();
     }
 }

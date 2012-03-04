@@ -9,14 +9,12 @@ namespace Lextm.TouchMouseMate
             if (flag == MouseEventFlags.LeftDown)
             {
                 Console.WriteLine("idle -> left down p");
-                machine.Current = LeftDownPending.Instance;
-                machine.Timer.Enabled = true;
+                machine.LeftDownPending();
             }
             else if (flag == MouseEventFlags.RightDown)
             {
                 Console.WriteLine("idle -> right down p");
-                machine.Current = RightDownPending.Instance;
-                machine.Timer.Enabled = true;
+                machine.RightDownPending();
             }
         }
 

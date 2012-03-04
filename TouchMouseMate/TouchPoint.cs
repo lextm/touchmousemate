@@ -4,31 +4,17 @@ namespace Lextm.TouchMouseMate
     {
         internal int X;
         internal int Y;
-        internal int Time;
         internal int Pixel;
         internal double CenterX;
         internal double CenterY;
-        public int PreviousPixel;
-        public int PreviousPreviousPixel;
-
-        public bool KeyUpDetected
-        {
-            get { return Pixel == 0 && PreviousPixel > 0; }
-        }
-
-        public bool KeyDownDetected
-        {
-            get { return PreviousPixel > 0 && PreviousPreviousPixel == 0; }
-        }
 
         public void Reset()
         {
             X = 0;
             Y = 0;
-            Time = 0;
             Pixel = 0;
-            CenterX = 0;
-            CenterY = 0;
+            CenterX = 0F;
+            CenterY = 0F;
         }
 
         public void Consume(int x, int y, int pixel)
@@ -40,15 +26,11 @@ namespace Lextm.TouchMouseMate
 
         public void ComputeCenter()
         {
-            CenterX = X / (double)Pixel;
-            CenterY = Y / (double)Pixel;
-        }
-
-        public void Prepare()
-        {
-            PreviousPreviousPixel = PreviousPixel;
-            PreviousPixel = Pixel;
-            Reset();
+            if (Pixel > 0)
+            {
+                CenterX = X/(double) Pixel;
+                CenterY = Y/(double) Pixel;
+            }
         }
     }
 }
