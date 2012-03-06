@@ -32,10 +32,14 @@ namespace Lextm.TouchMouseMate
         private static TouchZone _leftZone;
         private static TouchZone _rightZone;
 
-        internal static bool[,] TouchMap = new bool[16,14];
-        internal static int[] LeftBound = {3, 7, 2, 12};
-        internal static int[] MiddleBound = {6, 7, 2, 12};
-        internal static int[] RightBound = {8, 11, 2, 12};
+        internal static bool[,] TouchMap = new bool[15,13];
+        internal static int LeftMinX = 2;
+        internal static int LeftMaxX = 5;
+        internal static int RightMinX = 10;
+        internal static int RightMaxX = 14;
+        internal static int MinY = 0;
+        internal static int MaxY = 5;
+
         internal static int[] PixelFound = {0, 0};
 
         public static void SetCursorPosition(int x, int y)
@@ -89,7 +93,6 @@ namespace Lextm.TouchMouseMate
             // Reinizialize Touched Zones
             PixelFound[0] = 0;
             PixelFound[1] = 0;
-
             // Iterate over rows.
             for (int y = 0; y < pTouchMouseStatus.m_dwImageHeight; y++)
             {
@@ -102,8 +105,8 @@ namespace Lextm.TouchMouseMate
                         TouchMap[x, y] = true; // touch detected
                         int pixel = pabImage[pTouchMouseStatus.m_dwImageWidth*y + x]; // touch strength recorded
                         // Get the pixel value at current position.
-                        if (x >= LeftBound[0] && x <= LeftBound[1] &&
-                            y >= LeftBound[2] && y <= LeftBound[3])
+                        if (x >= LeftMinX && x <= LeftMaxX &&
+                            y >= MinY && y <= MaxY)
                         {
                             // Increment values.
                             if (pixel != 0)
@@ -111,17 +114,8 @@ namespace Lextm.TouchMouseMate
                                 _leftZone.Consume(x, y, pixel);
                             }
                         }
-                        else if (x >= MiddleBound[0] && x <= MiddleBound[1] &&
-                                 y >= MiddleBound[2] && y <= MiddleBound[3])
-                        {
-                            // Increment values.
-                            if (pixel != 0)
-                            {
-
-                            }
-                        }
-                        else if (x >= RightBound[0] && x <= RightBound[1] &&
-                                 y >= RightBound[2] && y <= RightBound[3])
+                        else if (x >= RightMinX && x <= RightMaxX &&
+                                 y >= MinY && y <= MaxY)
                         {
                             // Increment values.
                             if (pixel != 0)
@@ -162,29 +156,16 @@ namespace Lextm.TouchMouseMate
 
         private static void ApproachThree()
         {
-            for (int y = LeftBound[2]; y <= LeftBound[3]; y++)
-            {
-                for (int x = LeftBound[0]; x <= LeftBound[1]; x++)
-                {
-                    if (TouchMap[x, y]) PixelFound[0]++;
-                }
-            }
-            for (int y = RightBound[2]; y <= RightBound[3]; y++)
-            {
-                for (int x = RightBound[0]; x <= RightBound[1]; x++)
-                {
-                    if (TouchMap[x, y]) PixelFound[1]++;
-                }
-            }
-
             if (_leftZone.KeyUpDetected)
             {
                 Machine.Process(MouseEventFlags.LeftUp);
+                _leftZone.Movement = 0F;
             }
 
             if (_rightZone.KeyUpDetected)
             {
                 Machine.Process(MouseEventFlags.RightUp);
+                _rightZone.Movement = 0F;
             }
 
             if (_leftZone.KeyDownDetected)

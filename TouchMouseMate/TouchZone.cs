@@ -27,8 +27,9 @@ namespace Lextm.TouchMouseMate
                 _current.ComputeCenter();
                 if (_previous.Pixel > 0)
                 {
-                    Movement += (_current.CenterX - _previous.CenterX)*(_current.CenterX - _previous.CenterX)
-                                 + (_current.CenterY - _previous.CenterY)*(_current.CenterY - _previous.CenterY);
+                    var dX = _current.CenterX - _previous.CenterX;
+                    var dY = _current.CenterY - _previous.CenterY;
+                    Movement += Math.Sqrt(dX*dX + dY*dY);
                 }
             }
         }
