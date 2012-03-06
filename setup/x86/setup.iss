@@ -1,7 +1,7 @@
 #define MyAppID "{5DD923A5-F3E5-4BD9-A9B0-DCC793711799}"
 #define MyAppCopyright "Copyright (C) 2011-2012 Lex Li and other contributors"
 #define MyAppName "Touch Mouse Mate"
-#define MyAppVersion GetFileVersion("TouchMouseMate.exe")
+#define MyAppVersion GetFileVersion("..\..\bin\TouchMouseMate.exe")
 #pragma message "Detailed version info: " + MyAppVersion
 
 [Setup]
@@ -50,6 +50,7 @@ Source: "psvince.dll"; DestDir: "{app}"
 
 Source: "..\..\bin\TouchMouseMate.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: TMM
 Source: "..\..\bin\TouchMouseMate.exe.config"; DestDir: "{app}"; Flags: ignoreversion; Components: TMM
+Source: "..\..\bin\log4net.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: TMM
 Source: "TouchMouseSensor.dll"; DestDir: "{app}"; Components: TMM
 Source: "Microsoft.Research.TouchMouseSensor.dll"; DestDir: "{app}"; Components: TMM
 Source: "mouse.ico"; DestDir: "{app}"; Components: TMM
