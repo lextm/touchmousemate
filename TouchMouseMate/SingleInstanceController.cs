@@ -72,7 +72,7 @@ namespace Lextm.TouchMouseMate
             strip.Items.Add(touchOverClick);
             strip.Items.Add(leftHand);
             strip.Items.Add(help);
-            strip.Items.Add(new ToolStripMenuItem("-"));
+            strip.Items.Add(new ToolStripSeparator());
             strip.Items.Add(exit);
             //Published on November 23rd 2008 by Aston.
             //Released under the Free Art (copyleft) license.
