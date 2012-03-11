@@ -50,7 +50,7 @@ namespace Lextm.TouchMouseMate
                                                                   NativeMethods.Section.MiddleClick = menu.Checked;
                                                                   NativeMethods.Config.Save();
                                                               }) {Checked = NativeMethods.Section.MiddleClick, CheckOnClick = true};
-            var leftHand = new ToolStripMenuItem("Left-hand",
+            var leftHand = new ToolStripMenuItem("Left-handed",
                                                  Properties.Resources.input_mouse,
                                                  (sender, args) =>
                                                      {
