@@ -43,10 +43,10 @@ Name: TMM; Description: Touch Mouse Mate components; Types: Custom Full; Languag
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 ; dll used to check running notepad at install time
-Source: "psvince.dll"; Flags: dontcopy
+Source: "processviewer.exe"; Flags: dontcopy
 ;psvince is installed in {app} folder, so it will be
 ;loaded at uninstall time ;to check if notepad is running
-Source: "psvince.dll"; DestDir: "{app}"
+Source: "processviewer.exe"; DestDir: "{app}"
 
 Source: "..\..\bin\TouchMouseMate.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: TMM
 Source: "..\..\bin\TouchMouseMate.exe.config"; DestDir: "{app}"; Flags: ignoreversion; Components: TMM
@@ -72,16 +72,6 @@ Filename: {win}\Microsoft.NET\Framework\v4.0.30319\ngen.exe; Parameters: "uninst
 ;Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Touch Mouse Mate"; ValueData: """{app}\TouchMouseMate.exe"""; Flags: uninsdeletevalue
 
 [Code]
-// function IsModuleLoaded to call at install time
-// added also setuponly flag
-function IsModuleLoaded(modulename: AnsiString ):  Boolean;
-external 'IsModuleLoaded@files:psvince.dll stdcall setuponly';
-
-// function IsModuleLoadedU to call at uninstall time
-// added also uninstallonly flag
-function IsModuleLoadedU(modulename: AnsiString ):  Boolean;
-external 'IsModuleLoaded@{app}\psvince.dll stdcall uninstallonly' ;
-
 // =======================================
 // Testing if under Windows safe mode
 // =======================================
@@ -158,8 +148,31 @@ begin
 end;
 
 function ProductRunning(): Boolean;
-begin
-  Result := IsModuleLoaded( 'TouchMouseMate.exe' );
+var
+  ResultCode: Integer;
+begin  
+  if Exec('processviewer.exe', 'touchmousemate', '', SW_HIDE,
+     ewWaitUntilTerminated, ResultCode) then
+  begin
+    Result := ResultCode > 0;
+    Exit;    
+  end;  
+  
+  MsgBox('failed to check process', mbError, MB_OK);
+end;
+
+function ProductRunningU(): Boolean;
+var
+  ResultCode: Integer;
+begin  
+  if Exec(ExpandConstant('{app}\processviewer.exe'), 'touchmousemate', '', SW_HIDE,
+     ewWaitUntilTerminated, ResultCode) then
+  begin
+    Result := ResultCode > 0;
+    Exit;    
+  end;  
+  
+  MsgBox('failed to check process.', mbError, MB_OK);
 end;
 
 function ProductInstalled(): Boolean;
@@ -286,15 +299,15 @@ begin
   end;
 
   // check if notepad is running
-  if IsModuleLoadedU ('touchmousemate.exe') then
+  if ProductRunningU then
   begin
     MsgBox( '{#MyAppName} is running, please close it and uninstall again.',
              mbError, MB_OK );
     Result := false;
     Exit;
   end
-  else Result := true;
-
-  // Unload the DLL, otherwise the dll psvince is not deleted
-  UnloadDLL(ExpandConstant('{app}\psvince.dll'));
+  else
+  begin
+    Result := true;
+  end;
 end;
