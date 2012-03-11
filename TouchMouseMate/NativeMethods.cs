@@ -31,15 +31,45 @@ namespace Lextm.TouchMouseMate
 
         private static TouchZone _leftZone;
         private static TouchZone _rightZone;
+        private static int[,] _leftMask = new int[,]
+        {
+        	{0, 0, 1, 1, 1,   1, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 1, 1, 1,   1, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 1, 1, 1,   1, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 1, 1, 1,   1, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	
+        	{0, 0, 1, 1, 1,   1, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0}
+        };
 
+        private static int[,] _rightMask = new int[,]
+        {
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 1,   1, 1, 1, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 1,   1, 1, 1, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 1,   1, 1, 1, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 1,   1, 1, 1, 0, 0},
+        	
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 1,   1, 1, 1, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
+        	{0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0}
+        };
+        
         internal static bool[,] TouchMap = new bool[15,13];
-        internal static int LeftMinX = 2;
-        internal static int LeftMaxX = 5;
-        internal static int RightMinX = 10;
-        internal static int RightMaxX = 14;
-        internal static int MinY = 0;
-        internal static int MaxY = 5;
-
         internal static int[] PixelFound = {0, 0};
 
         public static void SetCursorPosition(int x, int y)
@@ -104,24 +134,21 @@ namespace Lextm.TouchMouseMate
                     {
                         TouchMap[x, y] = true; // touch detected
                         int pixel = pabImage[pTouchMouseStatus.m_dwImageWidth*y + x]; // touch strength recorded
-                        // Get the pixel value at current position.
-                        if (x >= LeftMinX && x <= LeftMaxX &&
-                            y >= MinY && y <= MaxY)
+                        if (pixel == 0)
                         {
-                            // Increment values.
-                            if (pixel != 0)
-                            {
-                                _leftZone.Consume(x, y, pixel);
-                            }
+                        	continue;
                         }
-                        else if (x >= RightMinX && x <= RightMaxX &&
-                                 y >= MinY && y <= MaxY)
+
+                        // Get the pixel value at current position.
+                        if (_leftMask[x, y] == 1)
                         {
                             // Increment values.
-                            if (pixel != 0)
-                            {
-                                _rightZone.Consume(x, y, pixel);
-                            }
+                            _leftZone.Consume(x, y, pixel);                            
+                        }
+                        else if (_rightMask[x,y] == 1)
+                        {
+                            // Increment values.
+                            _rightZone.Consume(x, y, pixel);                            
                         }
                     }
                 }
