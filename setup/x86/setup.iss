@@ -151,7 +151,8 @@ function ProductRunning(): Boolean;
 var
   ResultCode: Integer;
 begin  
-  if Exec('processviewer.exe', 'touchmousemate', '', SW_HIDE,
+  ExtractTemporaryFile('processviewer.exe');
+  if Exec(ExpandConstant('{tmp}\processviewer.exe'), 'touchmousemate', '', SW_HIDE,
      ewWaitUntilTerminated, ResultCode) then
   begin
     Result := ResultCode > 0;
