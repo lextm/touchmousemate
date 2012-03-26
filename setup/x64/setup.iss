@@ -20,9 +20,8 @@ VersionInfoVersion={#MyAppVersion}
 VersionInfoCompany=LeXtudio
 VersionInfoDescription={#MyAppName} {#MyAppVersion} Setup
 VersionInfoTextVersion={#MyAppVersion}
-InternalCompressLevel=max
+InternalCompressLevel=ultra
 VersionInfoCopyright={#MyAppCopyright}
-Compression=zip
 PrivilegesRequired=admin
 ShowLanguageDialog=yes
 WindowVisible=false
@@ -32,6 +31,7 @@ UninstallDisplayName={#MyAppName}
 SetupIconFile=mouse.ico
 UninstallDisplayIcon={app}\mouse.ico
 ArchitecturesInstallIn64BitMode=x64
+CompressionThreads=2
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
@@ -45,6 +45,9 @@ Name: TMM; Description: Touch Mouse Mate components; Types: Custom Full; Languag
 
 ; dll used to check running notepad at install time
 Source: "processviewer.exe"; Flags: dontcopy
+Source: "vcredist_x64.exe"; Flags: dontcopy
+Source: "dotNetFx40_Full_x86_x64.exe"; Flags: dontcopy
+
 ;psvince is installed in {app} folder, so it will be
 ;loaded at uninstall time ;to check if notepad is running
 Source: "processviewer.exe"; DestDir: "{app}"
@@ -197,6 +200,41 @@ begin
   Result := installed = 1;
 end;
 
+function VCRuntimeInstall(): Boolean;
+var
+  ResultCode: Integer;
+begin  
+  ExtractTemporaryFile('vcredist_x64.exe');
+  if Exec(ExpandConstant('{tmp}\vcredist_x64.exe'), '/q', '', SW_HIDE,
+     ewWaitUntilTerminated, ResultCode) then
+  begin
+    Result := ResultCode = 0;
+    Exit;    
+  end;  
+  
+  MsgBox('Failed to install Visual C++ 2010 runtime', mbError, MB_OK);
+end;
+
+function DotNetFrameworkInstalled(): Boolean;
+begin
+  Result := RegKeyExists(HKLM, 'Software\Microsoft\.NETFramework\policy\v4.0');
+end;
+
+function DotNetFrameworkInstall(): Boolean;
+var
+  ResultCode: Integer;
+begin  
+  ExtractTemporaryFile('dotNetFx40_Full_x86_x64.exe');
+  if Exec(ExpandConstant('{tmp}\dotNetFx40_Full_x86_x64.exe'), '/q', '', SW_HIDE,
+     ewWaitUntilTerminated, ResultCode) then
+  begin
+    Result := ResultCode = 0;
+    Exit;    
+  end;  
+  
+  MsgBox('Failed to install .NET Framework 4.0', mbError, MB_OK);
+end;
+
 function InitializeSetup(): Boolean;
 var
   oldVersion: String;
@@ -213,16 +251,32 @@ begin
   
   if not VCRuntimeInstalled then
   begin
-    MsgBox('{#MyAppName} needs Microsoft Visual C++ 2010 runtime to be installed (x64)', mbInformation, MB_OK);
-    Result := False;
-    Exit;
+    // Ask the user a Yes/No question
+    if MsgBox('Visual C++ 2010 runtime is needed. Click Yes to install it, or click No to exit.', mbConfirmation, MB_YESNO) = IDYES then
+    begin
+      // user clicked Yes
+      VCRuntimeInstall();      
+    end
+    else
+    begin
+      Result := False;
+      Exit;
+    end;
   end;
 
-  if (not RegKeyExists(HKLM, 'Software\Microsoft\.NETFramework\policy\v4.0')) then
+  if not DotNetFrameworkInstalled then
   begin
-    MsgBox('{#MyAppName} needs Microsoft .NET Framework 4.0 to be installed', mbInformation, MB_OK);
-    Result := False;
-    Exit;
+    // Ask the user a Yes/No question
+    if MsgBox('.NET Framework 4.0 is needed. Click Yes to install it, or click No to exit.', mbConfirmation, MB_YESNO) = IDYES then
+    begin
+      // user clicked Yes
+      DotNetFrameworkInstall();
+    end
+    else
+    begin
+      Result := False;
+      Exit;
+    end;    
   end;
 
   if ProductRunning then
