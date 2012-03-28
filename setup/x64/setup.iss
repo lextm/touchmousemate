@@ -156,7 +156,7 @@ var
   ResultCode: Integer;
 begin  
   ExtractTemporaryFile('processviewer.exe');
-  if Exec(ExpandConstant('{tmp}\processviewer.exe'), 'touchmousemate', '', SW_HIDE,
+  if Exec(ExpandConstant('{tmp}\processviewer.exe'), 'touchmousemate.exe', '', SW_HIDE,
      ewWaitUntilTerminated, ResultCode) then
   begin
     Result := ResultCode > 0;
@@ -170,7 +170,7 @@ function ProductRunningU(): Boolean;
 var
   ResultCode: Integer;
 begin  
-  if Exec(ExpandConstant('{app}\processviewer.exe'), 'touchmousemate', '', SW_HIDE,
+  if Exec(ExpandConstant('{app}\processviewer.exe'), 'touchmousemate.exe', '', SW_HIDE,
      ewWaitUntilTerminated, ResultCode) then
   begin
     Result := ResultCode > 0;
@@ -241,6 +241,7 @@ var
   uninstaller: String;
   ErrorCode: Integer;
   compareResult: Integer;
+  ResultCode: Integer;
 begin
   if IsSafeModeBoot then
   begin
@@ -279,12 +280,16 @@ begin
     end;    
   end;
 
-  if ProductRunning then
+  while ProductRunning do
   begin
-    MsgBox( '{#MyAppName} is running, please close it and run setup again.',
-             mbError, MB_OK );
-    Result := False;
-    Exit;
+    if MsgBox( '{#MyAppName} is running. Click Yes to shut it down and continue installation, or click No to exit.', mbConfirmation, MB_YESNO ) = IDNO then
+    begin
+      Result := False;
+      Exit;
+    end;
+
+    Exec('cmd.exe', '/C "taskkill /F /IM touchmousemate.exe"', '', SW_HIDE,
+     ewWaitUntilTerminated, ResultCode)
   end;
 
   if not ProductInstalled then
@@ -347,16 +352,17 @@ begin
     Exit;
   end;
 
-  // check if notepad is running
-  if ProductRunningU then
+  while ProductRunningU do
   begin
-    MsgBox( '{#MyAppName} is running, please close it and uninstall again.',
-             mbError, MB_OK );
-    Result := false;
-    Exit;
-  end
-  else
-  begin
-    Result := true;
+    if MsgBox( '{#MyAppName} is running. Click Yes to shut it down and continue installation, or click No to exit.', mbConfirmation, MB_YESNO ) = IDNO then
+    begin
+      Result := False;
+      Exit;
+    end;
+
+    Exec('cmd.exe', '/C "taskkill /F /IM touchmousemate.exe"', '', SW_HIDE,
+     ewWaitUntilTerminated, ResultCode)
   end;
+
+  Result := true;
 end;
