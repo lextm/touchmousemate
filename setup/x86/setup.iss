@@ -31,6 +31,8 @@ UninstallDisplayName={#MyAppName}
 SetupIconFile=mouse.ico
 UninstallDisplayIcon={app}\mouse.ico
 CompressionThreads=2
+MinVersion=0,5.01sp3
+
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
 [Types]

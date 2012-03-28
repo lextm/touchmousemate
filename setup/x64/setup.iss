@@ -32,6 +32,7 @@ SetupIconFile=mouse.ico
 UninstallDisplayIcon={app}\mouse.ico
 ArchitecturesInstallIn64BitMode=x64
 CompressionThreads=2
+MinVersion=0,5.01sp3
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
