@@ -245,7 +245,7 @@ var
 begin
   if IsWin64 then
   begin
-    MsgBox('Please use 64 bit installer.', mbError, MB_OK);
+    MsgBox('Please use AMD64 installer.', mbError, MB_OK);
     Result := False;
     Exit;
   end;

@@ -244,6 +244,13 @@ var
   compareResult: Integer;
   ResultCode: Integer;
 begin
+  if not IsWin64 then
+  begin
+    MsgBox('Please use IA32 installer.', mbError, MB_OK);
+    Result := False;
+    Exit;
+  end;
+  
   if IsSafeModeBoot then
   begin
     MsgBox('Cannot install under Windows Safe Mode.', mbError, MB_OK);
