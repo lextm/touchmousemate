@@ -351,6 +351,8 @@ begin
 end;
 
 function InitializeUninstall(): Boolean;
+var
+  ResultCode: Integer;
 begin
   if IsSafeModeBoot then
   begin
