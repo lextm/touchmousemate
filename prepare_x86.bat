@@ -12,4 +12,8 @@ IF NOT EXIST setup\x86\TouchMouseSensor.dll (
   XCOPY %systemdrive%\TMouse\x86\bin\Win32\Release\Microsoft.Research.TouchMouseSensor.dll lib\
 )
 
+IF NOT EXIST setup\x86\processviewer.exe (
+  XCOPY processviewer\processviewer.exe setup\x86\
+)
+
 :EOF

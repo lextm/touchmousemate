@@ -1,0 +1,3 @@
+[submodule "processviewer"]
+	path = processviewer
+	url = git@github.com:lextm/processviewer.git
